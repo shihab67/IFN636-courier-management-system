@@ -74,20 +74,10 @@ const FirebaseLogin = ({ ...others }) => {
                 try {
                   // DISPATCH
                   const response = await dispatch(store({ email: values.email, password: values.password }));
-                  console.log(response);
-                  if (
-                    response.payload &&
-                    response.payload.response &&
-                    response.payload.response.data &&
-                    response.payload.response.data.message
-                  ) {
-                    setErrors({ submit: response.payload.response.data.message });
-                    return;
-                  } else if (response.payload && response.payload.message) {
-                    setErrors({ submit: response.payload.message });
-                  } else if (response.payload && response.payload.data && response.payload.data.token && response.payload.data.user) {
+                  console.log(response, 'res');
+                  if (response.payload && response.payload.success) {
                     const token = response.payload.data.token;
-                    const userInfo = response.payload.data.user;
+                    const userInfo = response.payload.data;
 
                     authCtx.login({ ...userInfo, ...{ token: token } });
 
@@ -96,7 +86,7 @@ const FirebaseLogin = ({ ...others }) => {
                       navigate('/dashboard');
                     }, 2000);
                   } else {
-                    setErrors({ submit: 'Something went wrong' });
+                    setErrors({ submit: response.payload?.message || 'Something went wrong' });
                   }
                 } catch (error) {
                   console.log(error);

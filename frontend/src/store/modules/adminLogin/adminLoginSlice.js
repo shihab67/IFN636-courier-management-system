@@ -11,7 +11,7 @@ const adminLoginSlice = createSlice({
 export const store = createAsyncThunk('adminLoginSlice/store', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json' } };
   return await axios
-    .post(process.env.REACT_APP_API_URL + 'api/login', data, header)
+    .post(process.env.REACT_APP_API_URL + 'api/auth/login', data, header)
     .then(function (response) {
       return response.data;
     })

@@ -1,28 +1,49 @@
 name: CI
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  push:
+    branches:
+      - production
+  pull_request:
+    branches:
+      - production
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-        - name: Checkout code
-            uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-                node-version: '14'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-        - name: Install dependencies
-            run: npm install
+      - name: Install dependencies
+        run: npm install
 
-        - name: Run tests
-            run: npm test
+      - name: Run tests
+        run: npm test
+
+  seed:
+    if: github.event_name == 'workflow_dispatch'   # Only run on manual trigger
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Seeder
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: npm run seed
