@@ -4,7 +4,7 @@ import { lazy } from 'react';
 import MinimalLayout from 'layout/MinimalLayout';
 import Loadable from 'ui-component/Loadable';
 
-// login option 3 routing
+const Landing = Loadable(lazy(() => import('views/pages/Landing')));
 const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
 const NotFound = Loadable(lazy(() => import('views/pages/miscellaneous/NotFound')));
@@ -16,7 +16,11 @@ const AuthenticationRoutes = {
   element: <MinimalLayout />,
   children: [
     {
-      path: '/',
+      index: true,
+      element: <Landing />
+    },
+    {
+      path: '/login',
       element: <AuthLogin3 />
     },
     {

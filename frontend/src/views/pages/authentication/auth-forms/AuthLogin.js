@@ -33,7 +33,7 @@ import { useAppDispatch } from 'store/reducer';
 import { store } from '../../../../store/modules/adminLogin/adminLoginSlice';
 import AuthContext from '../../../../store/modules/authContext';
 
-const FirebaseLogin = ({ ...others }) => {
+const Login = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
   const [checked, setChecked] = useState(true);
@@ -74,7 +74,6 @@ const FirebaseLogin = ({ ...others }) => {
                 try {
                   // DISPATCH
                   const response = await dispatch(store({ email: values.email, password: values.password }));
-                  console.log(response, 'res');
                   if (response.payload && response.payload.success) {
                     const token = response.payload.data.token;
                     const userInfo = response.payload.data;
@@ -184,4 +183,4 @@ const FirebaseLogin = ({ ...others }) => {
   );
 };
 
-export default FirebaseLogin;
+export default Login;

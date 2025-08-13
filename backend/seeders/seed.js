@@ -10,9 +10,6 @@ import User from "../models/User.js";
 const seedData = asyncHandler(async () => {
 	await connectDB();
 
-	await Role.deleteMany({});
-	await User.deleteMany({});
-
 	// Seed roles if not exists
 	const rolesToSeed = [
 		{
@@ -84,13 +81,13 @@ const seedData = asyncHandler(async () => {
 		},
 		{
 			name: "Customer 2",
-			email: "customer1@gmail.com",
+			email: "customer2@gmail.com",
 			password: password,
 			role: customerRole._id,
 		},
 		{
 			name: "Customer 3",
-			email: "customer1@gmail.com",
+			email: "customer3@gmail.com",
 			password: password,
 			role: customerRole._id,
 		},

@@ -40,7 +40,7 @@ const Register = () => {
                   <AuthCardWrapper>
                     <Grid container spacing={2} alignItems="center" justifyContent="center">
                       <Grid item sx={{ mb: 3 }}>
-                        <Link to="#">
+                        <Link to="/">
                           <Logo />
                         </Link>
                       </Grid>
@@ -56,7 +56,7 @@ const Register = () => {
                         </Grid>
                       </Grid>
                       <Grid item xs={12}>
-                        <AuthRegister />
+                        <AuthRegister /> 
                       </Grid>
                       <Grid item xs={12}>
                         <Divider />

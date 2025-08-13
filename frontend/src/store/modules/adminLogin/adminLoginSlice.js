@@ -20,15 +20,21 @@ export const store = createAsyncThunk('adminLoginSlice/store', async (data) => {
     });
 });
 
-export const register = createAsyncThunk('adminLoginSlice/register', async (data) => {
+export const register = createAsyncThunk('adminLoginSlice/register', async (data, { rejectWithValue }) => {
   const header = { headers: { 'Content-Type': 'application/json' } };
   return await axios
-    .post(process.env.REACT_APP_API_URL + 'api/register', data, header)
+    .post(process.env.REACT_APP_API_URL + 'api/auth/register', data, header)
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 

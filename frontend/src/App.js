@@ -30,8 +30,8 @@ const App = () => {
 
     // IS NOT LOGGED IN
     const requestedRoute = window.location.pathname;
-    if (!authCtx.isLoggedIn && requestedRoute !== '/register') {
-      return navigate('/');
+    if (!authCtx.isLoggedIn && requestedRoute !== '/register' && requestedRoute !== '/login') {
+      return navigate('/', { replace: true });
     }
     // HAS ERROR ON REQUEST
     axios.interceptors.response.use(null, (error) => {

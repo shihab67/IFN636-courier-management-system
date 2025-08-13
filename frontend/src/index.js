@@ -13,7 +13,7 @@ import { store } from './store/index';
 import 'assets/scss/style.scss';
 import config from './config';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContextProvider } from './store/modules/authContext';
 
@@ -31,13 +31,13 @@ root.render(
             autoClose={5000}
             hideProgressBar={false}
             newestOnTop={false}
-            closeOnClick
+            closeOnClick={false}
             rtl={false}
             pauseOnFocusLoss
             draggable
             pauseOnHover
             theme="colored"
-            transition="Bounce"
+            transition={Bounce}
           />
           <App />
         </>

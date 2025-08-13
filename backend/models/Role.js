@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const roleSchema = new mongoose.Schema(
 	{
@@ -18,11 +18,11 @@ const roleSchema = new mongoose.Schema(
 		can_delete: {
 			type: Boolean,
 			default: true,
-		}
+		},
 	},
 	{
 		timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
 	}
 );
 
-export default mongoose.model("Role", roleSchema);
+module.exports = mongoose.model("Role", roleSchema);

@@ -14,6 +14,7 @@ import {
   Typography
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { toast } from 'react-toastify';
 
 // third party
 import { Formik } from 'formik';
@@ -29,13 +30,12 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import { useNavigate } from 'react-router-dom';
-import { Bounce, toast } from 'react-toastify';
 import { useAppDispatch } from 'store/reducer';
 import { register } from '../../../../store/modules/adminLogin/adminLoginSlice';
 
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
-const FirebaseRegister = ({ ...others }) => {
+const Register = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
   const [showPassword, setShowPassword] = useState(false);
@@ -85,7 +85,7 @@ const FirebaseRegister = ({ ...others }) => {
           password: Yup.string().max(255).required('Password is required').min(6, 'Password must be at least 6 characters'),
           password_confirmation: Yup.string()
             .max(255)
-            .required('Password confirm is required')
+            .required('Password confirmation is required')
             .oneOf([Yup.ref('password'), null], 'Password does not match')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -93,7 +93,6 @@ const FirebaseRegister = ({ ...others }) => {
             if (scriptedRef.current) {
               setStatus({ success: true });
               setSubmitting(false);
-              console.log(values);
 
               try {
                 // DISPATCH
@@ -105,41 +104,17 @@ const FirebaseRegister = ({ ...others }) => {
                     password_confirmation: values.password_confirmation
                   })
                 );
-                if (
-                  response.payload &&
-                  response.payload.response &&
-                  response.payload.response.data &&
-                  response.payload.response.data.message
-                ) {
-                  setErrors({ submit: response.payload.response.data.message });
-                  return;
-                } else if (
-                  response.payload &&
-                  response.payload.response &&
-                  response.payload.response.data &&
-                  response.payload.response.data.errors &&
-                  response.payload.response.data.errors.length > 0
-                ) {
-                  setErrors({ submit: response.payload.response.data.errors[0] });
-                } else if (response.payload && response.payload.status && response.payload.status === 'success') {
-                  toast.success('Account created successfully!', {
-                    position: 'top-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'colored',
-                    transition: Bounce
-                  });
+
+                if (response.payload && response.payload.success) {
+                  toast.success('Account created successfully!');
 
                   // Navigate to '/' after login
                   setTimeout(() => {
-                    navigate('/', { replace: true });
+                    toast.success("Redirecting to login page...");
+                    navigate('/login', { replace: true });
                   }, 3000);
                 } else {
-                  setErrors({ submit: 'Something went wrong' });
+                  setErrors({ submit: response.payload?.message || 'Something went wrong' });
                 }
               } catch (error) {
                 console.log(error);
@@ -302,4 +277,4 @@ const FirebaseRegister = ({ ...others }) => {
   );
 };
 
-export default FirebaseRegister;
+export default Register;
