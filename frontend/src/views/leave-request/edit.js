@@ -14,7 +14,7 @@ import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import * as Yup from 'yup';
-import Breadcrumb from './partials/breadcrumb';
+import Breadcrumb from '../utilities/breadcrumb';
 
 export default function EditLeave({ others }) {
   const scriptedRef = useScriptRef();

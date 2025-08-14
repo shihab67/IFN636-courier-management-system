@@ -53,7 +53,7 @@ const dashboard = {
       type: 'item',
       url: '/users',
       icon: icons.IconUsers,
-      breadcrumbs: false
+      breadcrumbs: true
     }
   ]
 };

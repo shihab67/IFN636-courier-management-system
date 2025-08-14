@@ -8,7 +8,7 @@ import { getLeave } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
-import Breadcrumb from './partials/breadcrumb';
+import Breadcrumb from '../utilities/breadcrumb';
 
 export default function LeaveDetails({ others }) {
   const menu = {

@@ -7,7 +7,7 @@ import { getUser } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
-import Breadcrumb from 'views/leave-request/partials/breadcrumb';
+import Breadcrumb from 'views/utilities/breadcrumb';
 export default function UserProfile({ others }) {
   const menu = {
     list: [

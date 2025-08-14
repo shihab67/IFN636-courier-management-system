@@ -2,7 +2,6 @@ import '@fontsource/inter';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Button,
-  CircularProgress,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -18,10 +17,10 @@ import {
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
 import useScriptRef from 'hooks/useScriptRef';
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getUser, updateUser } from 'store/modules/adminLogin/adminLoginSlice';
+import { createUser } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
@@ -29,78 +28,59 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Breadcrumb from 'views/utilities/breadcrumb';
 import * as Yup from 'yup';
 
-export default function EditUser({ ...others }) {
-  const { id } = useParams();
+export default function CreateLeave({ ...others }) {
   const scriptedRef = useScriptRef();
   const dispatch = useAppDispatch();
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [initialValues, setInitialValues] = useState(null);
-
   const menu = {
-    list: [{ title: 'Users', url: '/users' }],
-    active: 'Edit user'
+    list: [
+      {
+        title: 'Users',
+        url: '/users'
+      }
+    ],
+    active: 'Create new user'
   };
 
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleClickShowPasswordConfirm = () => setShowPasswordConfirm(!showPasswordConfirm);
-  const handleMouseDownPassword = (event) => event.preventDefault();
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await dispatch(getUser({ id: id, token: authCtx.currentUser.token }));
-        if (res.payload?.success) {
-          setInitialValues({
-            name: res.payload.data.name || '',
-            email: res.payload.data.email || '',
-            role: res.payload.data.role?.name || '',
-            password: '',
-            password_confirmation: '',
-            status: res.payload.data.status ?? true
-          });
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error('Failed to fetch user data');
-      }
-    };
-    fetchUser();
-  }, [id, authCtx]);
+  const handleClickShowPasswordConfirm = () => {
+    setShowPasswordConfirm(!showPasswordConfirm);
+  };
 
-  if (!initialValues) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <>
       <Breadcrumb menu={menu} />
 
-      <MainCard title="Edit user" {...others}>
+      <MainCard title="Create new user" {...others}>
         <Formik
-          initialValues={initialValues}
-          enableReinitialize
+          initialValues={{
+            name: '',
+            email: '',
+            role: '',
+            password: '',
+            password_confirmation: '',
+            status: true,
+            submit: null
+          }}
           validationSchema={Yup.object().shape({
             name: Yup.string().required('Name is required'),
             email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
             role: Yup.string().required('Role is required'),
-            password: Yup.string().max(255),
+            password: Yup.string().max(255).required('Password is required'),
             password_confirmation: Yup.string()
               .max(255)
-              .test('password-match', 'Passwords must match', function (value) {
-                const { password } = this.parent;
-                if (password && password.length > 0) {
-                  return value && value === password;
-                }
-                return true;
-              })
+              .required('Password Confirmation is required')
+              .oneOf([Yup.ref('password'), null], 'Passwords must match')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             try {
@@ -108,16 +88,26 @@ export default function EditUser({ ...others }) {
                 setStatus({ success: true });
                 setSubmitting(false);
 
-                const response = await dispatch(updateUser({ id, data: values, token: authCtx.currentUser.token }));
+                try {
+                  // DISPATCH
+                  const response = await dispatch(createUser({ data: values, token: authCtx.currentUser.token }));
+                  if (response.payload && response.payload.success) {
+                    toast.success('User created successfully!');
 
-                if (response.payload && response.payload.success) {
-                  toast.success('User updated successfully!');
-                  setTimeout(() => navigate('/users', { replace: true }), 2000);
-                } else {
-                  setErrors({ submit: response.payload?.message || 'Something went wrong' });
+                    // Navigate to '/users' after delay
+                    setTimeout(() => {
+                      navigate('/users', { replace: true });
+                    }, 3000);
+                  } else {
+                    setErrors({ submit: response.payload?.message || 'Something went wrong' });
+                  }
+                } catch (error) {
+                  console.error(error);
                 }
               }
             } catch (err) {
+              console.error(err);
+              // Set status, errors, and submitting state
               setStatus({ success: false });
               setErrors({ submit: err.message });
               setSubmitting(false);
@@ -130,16 +120,24 @@ export default function EditUser({ ...others }) {
                 <Grid md={6} xs={12} item>
                   <FormControl fullWidth error={Boolean(touched.name && errors.name)}>
                     <InputLabel htmlFor="name">Name</InputLabel>
-                    <OutlinedInput id="name" type="text" name="name" value={values.name} onChange={handleChange} label="Name" />
-                    {touched.name && errors.name && <FormHelperText error>{errors.name}</FormHelperText>}
+                    <OutlinedInput id="name" type="text" name="name" onChange={handleChange} label="Name" inputProps={{}} />
+                    {touched.name && errors.name && (
+                      <FormHelperText error id="standard-weight-helper-text-leave-type">
+                        {errors.name}
+                      </FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
 
                 <Grid md={6} xs={12} item>
                   <FormControl fullWidth error={Boolean(touched.email && errors.email)}>
                     <InputLabel htmlFor="email">Email</InputLabel>
-                    <OutlinedInput id="email" type="email" name="email" value={values.email} onChange={handleChange} label="Email" />
-                    {touched.email && errors.email && <FormHelperText error>{errors.email}</FormHelperText>}
+                    <OutlinedInput id="email" type="email" name="email" onChange={handleChange} label="Email" inputProps={{}} />
+                    {touched.email && errors.email && (
+                      <FormHelperText error id="standard-weight-helper-text-leave-type">
+                        {errors.email}
+                      </FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
 
@@ -150,34 +148,48 @@ export default function EditUser({ ...others }) {
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       name="password"
-                      value={values.password}
-                      onChange={handleChange}
                       label="Password"
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
                       endAdornment={
                         <InputAdornment position="end">
-                          <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end" size="large">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                            size="large"
+                          >
                             {showPassword ? <Visibility /> : <VisibilityOff />}
                           </IconButton>
                         </InputAdornment>
                       }
+                      inputProps={{}}
                     />
-                    {touched.password && errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
+                    {touched.password && errors.password && (
+                      <FormHelperText error id="standard-weight-helper-text-password-register">
+                        {errors.password}
+                      </FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
 
                 <Grid md={6} xs={12} item>
                   <FormControl fullWidth error={Boolean(touched.password_confirmation && errors.password_confirmation)}>
-                    <InputLabel htmlFor="password_confirmation">Confirm Password</InputLabel>
+                    <InputLabel htmlFor="password-confirmation">Confirm Password</InputLabel>
                     <OutlinedInput
-                      id="password_confirmation"
+                      id="outlined-adornment-password-confirmation-register"
                       type={showPasswordConfirm ? 'text' : 'password'}
                       name="password_confirmation"
-                      value={values.password_confirmation}
-                      onChange={handleChange}
                       label="Confirm Password"
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
+                            aria-label="toggle password visibility"
                             onClick={handleClickShowPasswordConfirm}
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
@@ -187,20 +199,27 @@ export default function EditUser({ ...others }) {
                           </IconButton>
                         </InputAdornment>
                       }
+                      inputProps={{}}
                     />
                     {touched.password_confirmation && errors.password_confirmation && (
-                      <FormHelperText error>{errors.password_confirmation}</FormHelperText>
+                      <FormHelperText error id="standard-weight-helper-text-password-confirmation-register">
+                        {errors.password_confirmation}
+                      </FormHelperText>
                     )}
                   </FormControl>
                 </Grid>
 
                 <Grid md={6} xs={12} item>
                   <FormControl fullWidth error={Boolean(touched.role && errors.role)}>
-                    <InputLabel id="role-select">Role</InputLabel>
-                    <Select labelId="role-select" name="role" value={values.role} onChange={handleChange} label="Role">
-                      <MenuItem value="Admin">Admin</MenuItem>
+                    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                    <Select labelId="demo-simple-select-label" id="demo-simple-select" name="role" label="Role" onChange={handleChange}>
+                      <MenuItem value={'Admin'}>Admin</MenuItem>
                     </Select>
-                    {touched.role && errors.role && <FormHelperText error>{errors.role}</FormHelperText>}
+                    {touched.role && errors.role && (
+                      <FormHelperText error id="standard-weight-helper-text-leave-type">
+                        {errors.role}
+                      </FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
 
@@ -209,7 +228,11 @@ export default function EditUser({ ...others }) {
                     control={<Switch name="status" checked={values.status} onChange={(e) => setFieldValue('status', e.target.checked)} />}
                     label="Status"
                   />
-                  {touched.status && errors.status && <FormHelperText error>{errors.status}</FormHelperText>}
+                  {touched.status && errors.status && (
+                    <FormHelperText error id="standard-weight-helper-text-leave-type">
+                      {errors.status}
+                    </FormHelperText>
+                  )}
                 </Grid>
 
                 <Grid md={12} xs={12} item>
@@ -232,7 +255,7 @@ export default function EditUser({ ...others }) {
                         variant="contained"
                         color="secondary"
                       >
-                        Update
+                        Submit
                       </Button>
                     </AnimateButton>
                   </Box>

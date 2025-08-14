@@ -1,165 +1,154 @@
-import { MoreVert } from '@mui/icons-material';
-import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import { MoreVert, ArrowDownward } from '@mui/icons-material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from '@mui/material';
+import { CssVarsProvider } from '@mui/joy/styles';
 import Chip from '@mui/joy/Chip';
 import Dropdown from '@mui/joy/Dropdown';
 import IconButton from '@mui/joy/IconButton';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
-import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
-import { Grid } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import React, { useContext, useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bounce, toast } from 'react-toastify';
-import { getAllUsers } from 'store/modules/adminLogin/adminLoginSlice';
-import AuthContext from 'store/modules/authContext';
+import { toast } from 'react-toastify';
+import DataTable from 'react-data-table-component';
 import { useAppDispatch } from 'store/reducer';
+import AuthContext from 'store/modules/authContext';
+import { deleteUser, getAllUsers } from 'store/modules/adminLogin/adminLoginSlice';
 import MainCard from 'ui-component/cards/MainCard';
+import Loader from 'ui-component/Loader';
 
 export default function Users({ ...others }) {
   const sortIcon = <ArrowDownward />;
-  const columns = [
-    {
-      name: '#',
-      selector: (row) => row.serial
-    },
-    {
-      name: 'Name',
-      selector: (row) => row.name
-    },
-    {
-      name: 'Email',
-      selector: (row) => row.email
-    },
-    {
-      name: 'Role',
-      selector: (row) => row.role
-    },
-    {
-      name: 'Status',
-      selector: (row) => row.status,
-      cell: (row) => handleStats(row.status)
-    },
-    {
-      name: 'Action',
-      selector: (row) => row.action,
-      cell: (row) => handleActions(row.id, row.user_id, row.role_id)
-    }
-  ];
   const dispatch = useAppDispatch();
   const authCtx = useContext(AuthContext);
-  const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  const handleStats = (status) => {
-    switch (status) {
-      case 'active':
-        return (
-          <JoyCssVarsProvider>
-            <CssBaseline enableColorScheme />
-            <Chip color="success" variant="soft">
-              Active
-            </Chip>
-          </JoyCssVarsProvider>
-        );
-      case 'inactive':
-        return (
-          <JoyCssVarsProvider>
-            <CssBaseline enableColorScheme />
-            <Chip color="warning" variant="soft">
-              Inactive
-            </Chip>
-          </JoyCssVarsProvider>
-        );
-      case 'suspended':
-        return (
-          <JoyCssVarsProvider>
-            <CssBaseline enableColorScheme />
-            <Chip color="danger" variant="soft">
-              Suspended
-            </Chip>
-          </JoyCssVarsProvider>
-        );
-    }
-  };
+  // Status chip
+  const handleStats = (status) => (
+    <CssVarsProvider>
+      <Chip color={status ? 'success' : 'warning'} variant="soft">
+        {status ? 'Active' : 'Inactive'}
+      </Chip>
+    </CssVarsProvider>
+  );
 
-  const handleActions = (id, user_id, role_id) => {
-    if (
-      (authCtx.currentUser.role.id === 1 && authCtx.currentUser.id !== user_id) ||
-      (authCtx.currentUser.role.id === 2 && authCtx.currentUser.id !== user_id && role_id !== 1)
-    ) {
+  // Actions column
+  const handleActions = (row) => {
+    if (authCtx.currentUser.role === 'Admin' && authCtx.currentUser.id !== row.id) {
       return (
-        <JoyCssVarsProvider>
-          <CssBaseline enableColorScheme />
+        <CssVarsProvider>
           <Dropdown>
             <MenuButton slots={{ root: IconButton }} slotProps={{ root: { variant: 'outlined', color: 'neutral' } }}>
               <MoreVert />
             </MenuButton>
             <Menu>
-              <MenuItem component={Link} to={`/users/edit/${id}`}>
+              <MenuItem component={Link} to={`/users/edit/${row.id}`}>
                 Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setSelectedUser(row);
+                  setDeleteDialogOpen(true);
+                }}
+              >
+                Delete
               </MenuItem>
             </Menu>
           </Dropdown>
-        </JoyCssVarsProvider>
+        </CssVarsProvider>
       );
-    } else {
-      return '---';
+    }
+    return '---';
+  };
+
+  // Fetch users
+  const fetchUsers = async () => {
+    const response = await dispatch(getAllUsers({ token: authCtx.currentUser.token }));
+    if (response.payload && response.payload.data) {
+      const users = response.payload.data.map((user, index) => ({
+        id: user._id,
+        serial: ++index,
+        name: user.name,
+        email: user.email,
+        role: user.role?.name || '---',
+        status: user.status
+      }));
+      setData(users);
     }
   };
+
   useEffect(() => {
     if (authCtx.currentUser.role.id === 3) {
-      toast.success('You are not allowed to access this page!', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce
-      });
-
+      toast.error('You are not allowed to access this page!');
       navigate('/dashboard');
     } else {
-      const fetchData = async () => {
-        const response = await dispatch(
-          getAllUsers({
-            token: authCtx.currentUser.token
-          })
-        );
-        if (response.payload && response.payload.data) {
-          const users = response.payload.data.map((user, index) => {
-            return {
-              id: user.id,
-              role_id: user.role_id,
-              user_id: user.id,
-              serial: ++index,
-              name: user.name,
-              email: user.email,
-              role: user.role?.name || '---',
-              status: user.status
-            };
-          });
-          setData(users);
-        }
-      };
-
-      fetchData();
+      fetchUsers();
     }
-  }, [dispatch, authCtx.currentUser.token, authCtx.currentUser.role.id, navigate]);
+  }, [authCtx.currentUser, navigate, dispatch]);
+
+  // Handle delete confirmation
+  const handleDelete = async () => {
+    if (!selectedUser) return;
+    const response = await dispatch(deleteUser({ id: selectedUser.id, token: authCtx.currentUser.token }));
+    if (response.payload?.success) {
+      toast.success('User deleted successfully!');
+      setDeleteDialogOpen(false);
+      setSelectedUser(null);
+      fetchUsers(); // Refresh list
+    } else {
+      toast.error(response.payload?.message || 'Failed to delete user');
+    }
+  };
+
   return (
     <>
-      <MainCard title="Users" {...others}>
+      <MainCard {...others}>
+        <Grid container md={12} xs={12} mb={2} justifyContent="space-between" alignItems="center">
+          <Typography variant="h3">Users</Typography>
+          <Button variant="contained" color="secondary" component={Link} to="/users/create">
+            Create New
+          </Button>
+        </Grid>
+
         <Grid container spacing={2}>
           <Grid item md={12} xs={12} mb={3}>
-            <DataTable pagination responsive sortIcon={sortIcon} columns={columns} data={data} />
+            {data.length === 0 && <Loader />}
+            <DataTable
+              pagination
+              responsive
+              sortIcon={sortIcon}
+              columns={[
+                { name: '#', selector: (row) => row.serial },
+                { name: 'Name', selector: (row) => row.name },
+                { name: 'Email', selector: (row) => row.email },
+                { name: 'Role', selector: (row) => row.role },
+                { name: 'Status', selector: (row) => row.status, cell: (row) => handleStats(row.status) },
+                { name: 'Action', selector: (row) => row.action, cell: (row) => handleActions(row) }
+              ]}
+              data={data}
+            />
           </Grid>
         </Grid>
       </MainCard>
+
+      {/* Delete confirmation modal */}
+      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete <strong>{selectedUser?.name}</strong>?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button color="error" onClick={handleDelete}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

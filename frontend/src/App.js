@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import { Box, CssBaseline, StyledEngineProvider } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
 // routing
@@ -52,7 +52,9 @@ const App = () => {
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
         <NavigationScroll>
-          <Routes />
+          <Box sx={{ mt: 5 }}>
+            <Routes />
+          </Box>
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>

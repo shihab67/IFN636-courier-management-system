@@ -35,7 +35,7 @@ const user = asyncHandler(async (req, res) => {
 
 const createUser = asyncHandler(async (req, res) => {
 	try {
-		const { name, email, password, role } = req.body;
+		const { name, email, password, role, status } = req.body;
 		const findRole = await Role.findOne({ name: role });
 
 		if (!findRole) {
@@ -48,6 +48,7 @@ const createUser = asyncHandler(async (req, res) => {
 			name,
 			email,
 			password,
+			status,
 			role: findRole._id,
 		});
 		res.status(201).json({
@@ -84,9 +85,12 @@ const updateUser = asyncHandler(async (req, res) => {
 		const findRole = await Role.findOne({ name: role });
 		user.name = name || user.name;
 		user.email = email || user.email;
-		user.password = password || user.password;
 		user.role = findRole._id;
-		user.status = status || user.status;
+		user.status = status !== undefined ? status : user.status;
+
+		if (password) {
+			user.password = password;
+		}
 		const updatedUser = await user.save();
 		res.json({
 			success: true,

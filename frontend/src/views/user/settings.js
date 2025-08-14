@@ -11,7 +11,7 @@ import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import Breadcrumb from 'views/leave-request/partials/breadcrumb';
+import Breadcrumb from 'views/utilities/breadcrumb';
 import * as Yup from 'yup';
 
 export default function UserSettings({ others }) {

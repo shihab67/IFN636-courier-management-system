@@ -15,7 +15,7 @@ import { getAllLeaves } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
-import LeaveTabs from './partials/tab';
+import LeaveTabs from '../pages/miscellaneous/tab';
 
 export default function LeaveList({ ...others }) {
   const params = useParams();

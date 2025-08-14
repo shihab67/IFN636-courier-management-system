@@ -74,7 +74,6 @@ const Login = ({ ...others }) => {
                 try {
                   // DISPATCH
                   const response = await dispatch(store({ email: values.email, password: values.password }));
-                  console.log(response)
                   if (response.payload && response.payload.success) {
                     const token = response.payload.data.token;
                     const userInfo = response.payload.data;

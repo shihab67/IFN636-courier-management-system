@@ -62,10 +62,10 @@ export const getLeave = createAsyncThunk('adminLoginSlice/getLeave', async (data
     });
 });
 
-export const createLeave = createAsyncThunk('adminLoginSlice/createLeave', async (data) => {
+export const createUser = createAsyncThunk('adminLoginSlice/createUser', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
-    .post(process.env.REACT_APP_API_URL + 'api/leave-request', data.data, header)
+    .post(process.env.REACT_APP_API_URL + 'api/users', data.data, header)
     .then(function (response) {
       return response.data;
     })
@@ -99,9 +99,10 @@ export const getAllUsers = createAsyncThunk('adminLoginSlice/getAllUsers', async
 });
 
 export const getUser = createAsyncThunk('adminLoginSlice/getUser', async (data) => {
+  console.log(data.id, "id")
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
-    .get(process.env.REACT_APP_API_URL + 'api/user/' + data.id, null, header)
+    .get(process.env.REACT_APP_API_URL + 'api/users/' + data.id, header)
     .then(function (response) {
       return response.data;
     })
@@ -113,7 +114,19 @@ export const getUser = createAsyncThunk('adminLoginSlice/getUser', async (data) 
 export const updateUser = createAsyncThunk('adminLoginSlice/updateUser', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
-    .post(process.env.REACT_APP_API_URL + 'api/user/update-status', data.data, header)
+    .patch(process.env.REACT_APP_API_URL + 'api/users/' + data.id, data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error;
+    });
+});
+
+export const deleteUser = createAsyncThunk('adminLoginSlice/deleteUser', async (data) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .delete(process.env.REACT_APP_API_URL + 'api/users/' + data.id, header)
     .then(function (response) {
       return response.data;
     })
