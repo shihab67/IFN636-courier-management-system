@@ -29,7 +29,7 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch } from 'store/reducer';
 import { register } from '../../../../store/modules/adminLogin/adminLoginSlice';
 
@@ -68,6 +68,8 @@ const Register = ({ ...others }) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const ref = searchParams.get('ref');
 
   return (
     <>
@@ -96,21 +98,26 @@ const Register = ({ ...others }) => {
 
               try {
                 // DISPATCH
-                const response = await dispatch(
-                  register({
-                    name: values.name,
-                    email: values.email,
-                    password: values.password,
-                    password_confirmation: values.password_confirmation
-                  })
-                );
+                let data = {
+                  name: values.name,
+                  email: values.email,
+                  password: values.password
+                };
+
+                if (ref !== null && ref === 'courier') {
+                  data = {
+                    ...data,
+                    role: 'Courier'
+                  };
+                }
+                const response = await dispatch(register(data));
 
                 if (response.payload && response.payload.success) {
                   toast.success('Account created successfully!');
 
                   // Navigate to '/' after login
                   setTimeout(() => {
-                    toast.success("Redirecting to login page...");
+                    toast.success('Redirecting to login page...');
                     navigate('/login', { replace: true });
                   }, 3000);
                 } else {
@@ -121,7 +128,6 @@ const Register = ({ ...others }) => {
               }
             }
           } catch (err) {
-            console.error(err);
             if (scriptedRef.current) {
               setStatus({ success: false });
               setErrors({ submit: err.message });

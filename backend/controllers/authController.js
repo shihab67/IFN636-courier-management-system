@@ -17,11 +17,12 @@ const registerUser = async (req, res) => {
 				.json({ success: false, message: "User already exists!" });
 
 		const customerRole = await Role.findOne({ name: "Customer" });
+		const courierRole = await Role.findOne({ name: "Courier" });
 		await User.create({
 			name,
 			email,
 			password,
-			role: customerRole._id,
+			role: req.body?.role && req.body.role === "Courier" ? courierRole._id : customerRole._id,
 		});
 
 		res.status(201).json({
