@@ -101,7 +101,7 @@ const updateUser = asyncHandler(async (req, res) => {
 	}
 });
 
-const deleteUser = asyncHandler(async (req, res) => {
+const deactivateUser = asyncHandler(async (req, res) => {
 	try {
 		const user = await User.findById(req.params.id);
 		if (!user) {
@@ -110,14 +110,35 @@ const deleteUser = asyncHandler(async (req, res) => {
 				message: "User not found",
 			});
 		}
-		await user.remove();
+		await user.updateOne({ status: false });
 		res.json({
 			success: true,
-			message: "User deleted successfully",
+			message: "User deactivated successfully",
 		});
 	} catch (error) {
 		res.status(500).json({ success: false, message: error.message });
 	}
 });
 
-module.exports = { users, user, createUser, updateUser, deleteUser };
+const myProfile = asyncHandler(async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id)
+			.select("-password")
+			.populate("role");
+		res.json({
+			success: true,
+			data: user,
+		});
+	} catch (error) {
+		res.status(500).json({ success: false, message: error.message });
+	}
+});
+
+module.exports = {
+	users,
+	user,
+	createUser,
+	updateUser,
+	deactivateUser,
+	myProfile,
+};

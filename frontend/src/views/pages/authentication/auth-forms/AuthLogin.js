@@ -95,7 +95,7 @@ const Login = ({ ...others }) => {
           } catch (err) {
             // Set status, errors, and submitting state
             setStatus({ success: false });
-            setErrors({ submit: error.message });
+            setErrors({ submit: response.payload?.message || err.message });
             setSubmitting(false);
           }
         }}

@@ -1,3 +1,4 @@
+const asyncHandler = require("express-async-handler");
 const Role = require("../models/Role");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
@@ -22,7 +23,10 @@ const registerUser = async (req, res) => {
 			name,
 			email,
 			password,
-			role: req.body?.role && req.body.role === "Courier" ? courierRole._id : customerRole._id,
+			role:
+				req.body?.role && req.body.role === "Courier"
+					? courierRole._id
+					: customerRole._id,
 		});
 
 		res.status(201).json({
@@ -104,4 +108,36 @@ const updateUserProfile = async (req, res) => {
 	}
 };
 
-module.exports = { registerUser, loginUser, updateUserProfile, getProfile };
+const updateUserPassword = asyncHandler(async (req, res) => {
+	try {
+		const { currentPassword, password } = req.body;
+		const user = await User.findById(req.user.id);
+		if (!user) {
+			return res
+				.status(404)
+				.json({ success: false, message: "User not found" });
+		}
+
+		const isMatch = await bcrypt.compare(currentPassword, user.password);
+		if (!isMatch) {
+			return res.status(400).json({
+				success: false,
+				message: "Current password is incorrect",
+			});
+		}
+		user.password = password;
+		await user.save();
+		res.json({ success: true, message: "Password updated successfully" });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ success: false, message: error.message });
+	}
+});
+
+module.exports = {
+	registerUser,
+	loginUser,
+	updateUserProfile,
+	getProfile,
+	updateUserPassword,
+};

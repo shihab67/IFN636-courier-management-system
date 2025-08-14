@@ -5,7 +5,7 @@ import { Box } from '@mui/system';
 import { Formik } from 'formik';
 import useScriptRef from 'hooks/useScriptRef';
 import React, { useContext, useState } from 'react';
-import { Bounce, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { updateUserPassword } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
@@ -74,77 +74,38 @@ export default function UserSettings({ others }) {
               if (scriptedRef.current) {
                 setStatus({ success: true });
                 setSubmitting(false);
-                console.log(values);
 
                 try {
                   // DISPATCH
                   const response = await dispatch(
                     updateUserPassword({
                       data: {
-                        current_password: values.current_password,
-                        password: values.password,
-                        password_confirmation: values.password_confirmation
+                        currentPassword: values.current_password,
+                        password: values.password
                       },
                       token: authCtx.currentUser.token
                     })
                   );
-                  if (
-                    response.payload &&
-                    response.payload.response &&
-                    response.payload.response.data &&
-                    response.payload.response.data.message
-                  ) {
-                    setErrors({ submit: response.payload.response.data.message });
-                    return;
-                  } else if (
-                    response.payload &&
-                    response.payload.response &&
-                    response.payload.response.data &&
-                    response.payload.response.data.errors &&
-                    response.payload.response.data.errors.length > 0
-                  ) {
-                    setErrors({ submit: response.payload.response.data.errors[0] });
-                  } else if (response.payload && response.payload.status && response.payload.status === 'success') {
-                    toast.success('Password updated successfully!', {
-                      position: 'top-right',
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: 'colored',
-                      transition: Bounce
-                    });
 
-                    toast.success('Use your new password to login', {
-                      position: 'top-right',
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: 'colored',
-                      transition: Bounce
-                    });
+                  if (response.payload && response.payload?.success) {
+                    toast.success('Password updated successfully!');
+                    toast.success('Use your new password to login!');
 
                     // Navigate to '/' after password is updated
                     setTimeout(() => {
                       authCtx.logout();
                     }, 1000);
                   } else {
-                    setErrors({ submit: 'Something went wrong' });
+                    setErrors({ submit: response.payload?.message || 'Something went wrong' });
                   }
                 } catch (error) {
                   console.log(error);
                 }
               }
             } catch (err) {
-              console.error(err);
               if (scriptedRef.current) {
                 setStatus({ success: false });
-                setErrors({ submit: err.message });
+                setErrors({ submit: response.payload?.message || err.message });
                 setSubmitting(false);
               }
             }

@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import DataTable from 'react-data-table-component';
 import { useAppDispatch } from 'store/reducer';
 import AuthContext from 'store/modules/authContext';
-import { deleteUser, getAllUsers } from 'store/modules/adminLogin/adminLoginSlice';
+import { deactivateUser, getAllUsers } from 'store/modules/adminLogin/adminLoginSlice';
 import MainCard from 'ui-component/cards/MainCard';
 import Loader from 'ui-component/Loader';
 
@@ -23,7 +23,7 @@ export default function Users({ ...others }) {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deactivateDialogOpen, setDeactivateDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   // Status chip
@@ -51,10 +51,10 @@ export default function Users({ ...others }) {
               <MenuItem
                 onClick={() => {
                   setSelectedUser(row);
-                  setDeleteDialogOpen(true);
+                  setDeactivateDialogOpen(true);
                 }}
               >
-                Delete
+                Deactivate
               </MenuItem>
             </Menu>
           </Dropdown>
@@ -89,17 +89,17 @@ export default function Users({ ...others }) {
     }
   }, [authCtx.currentUser, navigate, dispatch]);
 
-  // Handle delete confirmation
-  const handleDelete = async () => {
+  // Handle deactivation confirmation
+  const handleDeactivate = async () => {
     if (!selectedUser) return;
-    const response = await dispatch(deleteUser({ id: selectedUser.id, token: authCtx.currentUser.token }));
+    const response = await dispatch(deactivateUser({ id: selectedUser.id, token: authCtx.currentUser.token }));
     if (response.payload?.success) {
-      toast.success('User deleted successfully!');
-      setDeleteDialogOpen(false);
+      toast.success('User deactivated successfully!');
+      setDeactivateDialogOpen(false);
       setSelectedUser(null);
-      fetchUsers(); // Refresh list
+      fetchUsers();
     } else {
-      toast.error(response.payload?.message || 'Failed to delete user');
+      toast.error(response.payload?.message || 'Failed to deactivate user');
     }
   };
 
@@ -134,18 +134,18 @@ export default function Users({ ...others }) {
         </Grid>
       </MainCard>
 
-      {/* Delete confirmation modal */}
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+      {/* Deactivate confirmation modal */}
+      <Dialog open={deactivateDialogOpen} onClose={() => setDeactivateDialogOpen(false)}>
+        <DialogTitle>Confirm Deactivate</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete <strong>{selectedUser?.name}</strong>?
+            Are you sure you want to deactivate <strong>{selectedUser?.name}</strong>?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button color="error" onClick={handleDelete}>
-            Delete
+          <Button onClick={() => setDeactivateDialogOpen(false)}>Cancel</Button>
+          <Button color="error" onClick={handleDeactivate}>
+            Deactivate
           </Button>
         </DialogActions>
       </Dialog>

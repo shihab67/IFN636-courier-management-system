@@ -3,7 +3,7 @@ import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import { Grid } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import React, { useContext, useEffect, useState } from 'react';
-import { getUser } from 'store/modules/adminLogin/adminLoginSlice';
+import { getProfile } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
 import MainCard from 'ui-component/cards/MainCard';
@@ -16,7 +16,7 @@ export default function UserProfile({ others }) {
         url: '/dashboard'
       }
     ],
-    active: 'User Profile'
+    active: 'My Profile'
   };
 
   const authCtx = useContext(AuthContext);
@@ -26,12 +26,12 @@ export default function UserProfile({ others }) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await dispatch(
-        getUser({
+        getProfile({
           id: authCtx.currentUser.id,
           token: authCtx.currentUser.token
         })
       );
-      if (response.payload && response.payload.status && response.payload.status === 'success' && response.payload.data) {
+      if (response.payload && response.payload?.success) {
         setData(response.payload.data);
       }
     };
@@ -42,7 +42,7 @@ export default function UserProfile({ others }) {
     <>
       <Breadcrumb menu={menu} />
 
-      <MainCard title="User Profile" {...others}>
+      <MainCard title="My Profile" {...others}>
         <JoyCssVarsProvider>
           <CssBaseline enableColorScheme />
           {data && (
@@ -79,43 +79,7 @@ export default function UserProfile({ others }) {
                   Status:
                 </Typography>
                 <Typography level="body-lg" fontSize="xl">
-                  {data.status}
-                </Typography>
-              </Grid>
-
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
-                <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
-                  Leaves Taken:
-                </Typography>
-                <Typography level="body-lg" fontSize="xl">
-                  {data.all_leaves?.length || 0}
-                </Typography>
-              </Grid>
-
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
-                <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
-                  Pending Leaves:
-                </Typography>
-                <Typography level="body-lg" fontSize="xl">
-                  {data.pending_leaves?.length || 0}
-                </Typography>
-              </Grid>
-
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
-                <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
-                  Approved Leaves:
-                </Typography>
-                <Typography level="body-lg" fontSize="xl">
-                  {data.approved_leaves?.length || 0}
-                </Typography>
-              </Grid>
-
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
-                <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
-                  Rejected Leaves:
-                </Typography>
-                <Typography level="body-lg" fontSize="xl">
-                  {data.rejected_leaves?.length || 0}
+                  {data.status === true ? 'Active' : 'Inactive'}
                 </Typography>
               </Grid>
             </Grid>

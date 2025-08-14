@@ -4,7 +4,8 @@ const {
 	user,
 	createUser,
 	updateUser,
-	deleteUser,
+	deactivateUser,
+	myProfile,
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
 const hasAccess = require("../middleware/hasAccessMiddleware");
@@ -14,6 +15,7 @@ router.get("/", protect, hasAccess("Admin"), users);
 router.get("/:id", protect, hasAccess("Admin"), user);
 router.post("/", protect, hasAccess("Admin"), createUser);
 router.patch("/:id", protect, hasAccess("Admin"), updateUser);
-router.delete("/:id", protect, hasAccess("Admin"), deleteUser);
+router.post("/:id", protect, hasAccess("Admin"), deactivateUser);
+router.get("/me/profile", protect, myProfile);
 
 module.exports = router;

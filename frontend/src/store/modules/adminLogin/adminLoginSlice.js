@@ -16,7 +16,13 @@ export const store = createAsyncThunk('adminLoginSlice/store', async (data) => {
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response?.data?.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
@@ -46,7 +52,13 @@ export const getAllLeaves = createAsyncThunk('adminLoginSlice/getAllLeaves', asy
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
@@ -70,7 +82,13 @@ export const createUser = createAsyncThunk('adminLoginSlice/createUser', async (
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
@@ -99,7 +117,6 @@ export const getAllUsers = createAsyncThunk('adminLoginSlice/getAllUsers', async
 });
 
 export const getUser = createAsyncThunk('adminLoginSlice/getUser', async (data) => {
-  console.log(data.id, "id")
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
     .get(process.env.REACT_APP_API_URL + 'api/users/' + data.id, header)
@@ -119,19 +136,49 @@ export const updateUser = createAsyncThunk('adminLoginSlice/updateUser', async (
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
-export const deleteUser = createAsyncThunk('adminLoginSlice/deleteUser', async (data) => {
+export const deactivateUser = createAsyncThunk('adminLoginSlice/deleteUser', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
-    .delete(process.env.REACT_APP_API_URL + 'api/users/' + data.id, header)
+    .post(process.env.REACT_APP_API_URL + 'api/users/' + data.id, header)
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const getProfile = createAsyncThunk('adminLoginSlice/getUser', async (data) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/users/me/profile', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
@@ -147,15 +194,21 @@ export const getStat = createAsyncThunk('adminLoginSlice/getStat', async (data) 
     });
 });
 
-export const updateUserPassword = createAsyncThunk('adminLoginSlice/updateUserPassword', async (data) => {
+export const updateUserPassword = createAsyncThunk('adminLoginSlice/updateUserPassword', async (data, { rejectWithValue }) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
-    .post(process.env.REACT_APP_API_URL + 'api/user/update-password', data.data, header)
+    .patch(process.env.REACT_APP_API_URL + 'api/auth/update-password', data.data, header)
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
