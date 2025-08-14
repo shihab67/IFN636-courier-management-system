@@ -8,7 +8,6 @@ export default function Landing() {
   const [scrollY, setScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const authCtx = useContext(AuthContext);
-  console.log(authCtx);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -65,7 +64,9 @@ export default function Landing() {
               professional service you can count on.
             </p>
             <div className="hero-buttons fade-in-up delay-400">
-              <button className="btn-primary-large">Get Started Today</button>
+              <Link to="/register?ref=courier">
+                <button className="btn-primary-large">Get Started Today</button>
+              </Link>
               <button className="btn-outline-large">Learn More</button>
             </div>
           </div>
@@ -162,7 +163,7 @@ export default function Landing() {
               }
             ].map((testimonial, index) => (
               <div key={index} className="testimonial-card">
-                <p className="testimonial-quote">&quot{testimonial.quote}&quot</p>
+                <p className="testimonial-quote">{`"${testimonial.quote}"`}</p>
                 <div className="testimonial-author">
                   <strong>{testimonial.author}</strong>
                   <span className="testimonial-role">{testimonial.role}</span>

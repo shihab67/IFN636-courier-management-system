@@ -1,20 +1,42 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require("path");
+const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
+const upload = require("./config/multer");
 
 dotenv.config();
-
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use("/api/auth", require("./routes/authRoutes"));
+// CORS setup
+app.use(
+	cors({
+		origin: "http://localhost:3000",
+		methods: "GET,POST,PUT,DELETE,PATCH",
+		credentials: true,
+	})
+);
 
-// Export the app object for testing
+// Body parsing
+app.use(express.json()); // for JSON payloads
+app.use(express.urlencoded({ extended: false })); // for form data
+app.use(cookieParser());
+
+// Static files
+app.use("/", express.static(path.join(__dirname, "public")));
+
+// Routes
+app.use("/api/auth", upload.any(), require("./routes/authRoutes"));
+app.use("/api/users", upload.any(), require("./routes/userRoutes"));
+
+// View engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+// Server start
 if (require.main === module) {
 	connectDB();
-	// If the file is run directly, start the server
 	const PORT = process.env.PORT || 5001;
 	app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
