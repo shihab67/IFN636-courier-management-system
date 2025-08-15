@@ -10,6 +10,7 @@ const Users = Loadable(lazy(() => import('views/users')));
 const CreateUser = Loadable(lazy(() => import('views/users/create')));
 const EditUser = Loadable(lazy(() => import('views/users/edit')));
 const UserProfile = Loadable(lazy(() => import('views/user/profile')));
+const UpdateUserProfile = Loadable(lazy(() => import('views/user/UpdateProfile')));
 const UserSettings = Loadable(lazy(() => import('views/user/settings')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -74,6 +75,10 @@ const MainRoutes = {
         {
           path: 'profile',
           element: <UserProfile />
+        },
+        {
+          path: 'profile/update',
+          element: <UpdateUserProfile />
         },
         {
           path: 'settings',

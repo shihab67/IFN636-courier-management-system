@@ -146,6 +146,24 @@ export const updateUser = createAsyncThunk('adminLoginSlice/updateUser', async (
     });
 });
 
+export const updateProfile = createAsyncThunk('adminLoginSlice/updateProfile', async (data) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .patch(process.env.REACT_APP_API_URL + 'api/auth/profile', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
 export const deactivateUser = createAsyncThunk('adminLoginSlice/deleteUser', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios

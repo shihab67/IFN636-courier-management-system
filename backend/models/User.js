@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 	},
 	password: { type: String, required: true },
+	phone_number: { type: String, trim: true, default: null },
+	address: { type: String, trim: true, default: null },
 	role: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Role",

@@ -1,8 +1,9 @@
-import { Typography } from '@mui/joy';
+import { Button, Chip } from '@mui/joy';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getProfile } from 'store/modules/adminLogin/adminLoginSlice';
 import AuthContext from 'store/modules/authContext';
 import { useAppDispatch } from 'store/reducer';
@@ -42,12 +43,19 @@ export default function UserProfile({ others }) {
     <>
       <Breadcrumb menu={menu} />
 
-      <MainCard title="My Profile" {...others}>
+      <MainCard {...others}>
         <JoyCssVarsProvider>
           <CssBaseline enableColorScheme />
           {data && (
             <Grid container spacing={2}>
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
+              <Grid container md={12} xs={12} mb={2} justifyContent="space-between" alignItems="center">
+                <Typography variant="h3">Details</Typography>
+                <Button variant="contained" color="secondary" component={Link} to="/user/profile/update">
+                  Update Profile
+                </Button>
+              </Grid>
+
+              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'} sx={{ mb: 2 }}>
                 <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
                   Name:
                 </Typography>
@@ -56,7 +64,7 @@ export default function UserProfile({ others }) {
                 </Typography>
               </Grid>
 
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
+              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'} sx={{ mb: 2 }}>
                 <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
                   Email:
                 </Typography>
@@ -65,7 +73,25 @@ export default function UserProfile({ others }) {
                 </Typography>
               </Grid>
 
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
+              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'} sx={{ mb: 2 }}>
+                <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
+                  Phone Number:
+                </Typography>
+                <Typography level="body-lg" fontSize="xl">
+                  {data.phone_number || '---'}
+                </Typography>
+              </Grid>
+
+              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'} sx={{ mb: 2 }}>
+                <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
+                  Address:
+                </Typography>
+                <Typography level="body-lg" fontSize="xl">
+                  {data.address || '---'}
+                </Typography>
+              </Grid>
+
+              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'} sx={{ mb: 2 }}>
                 <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
                   Role:
                 </Typography>
@@ -74,13 +100,13 @@ export default function UserProfile({ others }) {
                 </Typography>
               </Grid>
 
-              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'}>
+              <Grid md={12} xs={12} item display={'flex'} alignItems={'center'} sx={{ mb: 2 }}>
                 <Typography level="h4" fontSize="xl" mr={2} textTransform={'uppercase'}>
                   Status:
                 </Typography>
-                <Typography level="body-lg" fontSize="xl">
-                  {data.status === true ? 'Active' : 'Inactive'}
-                </Typography>
+                <Chip color={data.status ? 'success' : 'warning'} variant="soft">
+                  {data.status ? 'Active' : 'Inactive'}
+                </Chip>
               </Grid>
             </Grid>
           )}
