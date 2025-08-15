@@ -45,7 +45,10 @@ export default function Landing() {
                   <button className="btn-outline">Login</button>
                 </Link>
               )}
-              <button className="btn-primary">Track Your Parcel</button>
+
+              <Link to="/delivery-tracker">
+                <button className="btn-primary">Track Your Parcel</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -64,7 +67,7 @@ export default function Landing() {
               professional service you can count on.
             </p>
             <div className="hero-buttons fade-in-up delay-400">
-              <Link to="/register?ref=courier">
+              <Link to="/register?">
                 <button className="btn-primary-large">Get Started Today</button>
               </Link>
               <button className="btn-outline-large">Learn More</button>
@@ -139,7 +142,9 @@ export default function Landing() {
               <span>✓ Growth opportunities</span>
             </div>
           </div>
-          <button className="btn-join">Join Us and Deliver</button>
+          <Link to="/register?ref=courier">
+            <button className="btn-join">Join Us and Deliver</button>
+          </Link>
         </div>
       </section>
 
