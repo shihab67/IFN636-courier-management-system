@@ -44,36 +44,6 @@ export const register = createAsyncThunk('adminLoginSlice/register', async (data
     });
 });
 
-export const getAllLeaves = createAsyncThunk('adminLoginSlice/getAllLeaves', async (data) => {
-  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
-  return await axios
-    .get(process.env.REACT_APP_API_URL + 'api/leave-request/all/' + data.type, null, header)
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      if (error.response) {
-        return rejectWithValue({
-          status: error.response.status,
-          message: error.response.data.message || 'Something went wrong'
-        });
-      }
-      return rejectWithValue({ message: error.message });
-    });
-});
-
-export const getLeave = createAsyncThunk('adminLoginSlice/getLeave', async (data) => {
-  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
-  return await axios
-    .get(process.env.REACT_APP_API_URL + 'api/leave-request/' + data.id, null, header)
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      return error;
-    });
-});
-
 export const createUser = createAsyncThunk('adminLoginSlice/createUser', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
@@ -92,27 +62,99 @@ export const createUser = createAsyncThunk('adminLoginSlice/createUser', async (
     });
 });
 
-export const approveLeave = createAsyncThunk('adminLoginSlice/approveLeave', async (data) => {
+export const getAllUsers = createAsyncThunk('adminLoginSlice/getAllUsers', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+
+  let endpoint = 'api/users/';
+  if (data.role) {
+    endpoint += '?role=' + data.role;
+  }
   return await axios
-    .post(process.env.REACT_APP_API_URL + 'api/leave-request/update', data.data, header)
+    .get(process.env.REACT_APP_API_URL + endpoint, null, header)
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
-export const getAllUsers = createAsyncThunk('adminLoginSlice/getAllUsers', async (data) => {
+export const getAllDeliveries = createAsyncThunk('adminLoginSlice/getAllDeliveries', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
-    .get(process.env.REACT_APP_API_URL + 'api/users/', null, header)
+    .get(process.env.REACT_APP_API_URL + 'api/delivery', header)
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const CreateDelivery = createAsyncThunk('adminLoginSlice/CreateDelivery', async (data) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .post(process.env.REACT_APP_API_URL + 'api/delivery', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const UpdateDelivery = createAsyncThunk('adminLoginSlice/UpdateDelivery', async (data) => {
+  console.log(data, "data")
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .patch(process.env.REACT_APP_API_URL + 'api/delivery/' + data.id, data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const GetDeliveryById = createAsyncThunk('adminLoginSlice/GetDeliveryById', async (data) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/delivery/' + data.id, data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
@@ -124,7 +166,13 @@ export const getUser = createAsyncThunk('adminLoginSlice/getUser', async (data) 
       return response.data;
     })
     .catch(function (error) {
-      return error;
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
     });
 });
 
@@ -197,18 +245,6 @@ export const getProfile = createAsyncThunk('adminLoginSlice/getUser', async (dat
         });
       }
       return rejectWithValue({ message: error.message });
-    });
-});
-
-export const getStat = createAsyncThunk('adminLoginSlice/getStat', async (data) => {
-  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
-  return await axios
-    .get(process.env.REACT_APP_API_URL + 'api/stats/', null, header)
-    .then(function (response) {
-      return response.data;
-    })
-    .catch(function (error) {
-      return error;
     });
 });
 

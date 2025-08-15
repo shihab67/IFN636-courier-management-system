@@ -29,6 +29,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/api/auth", upload.any(), require("./routes/authRoutes"));
 app.use("/api/users", upload.any(), require("./routes/userRoutes"));
+app.use("/api/delivery", upload.any(), require("./routes/deliveryRoutes"));
 
 // View engine setup
 app.set("views", path.join(__dirname, "views"));

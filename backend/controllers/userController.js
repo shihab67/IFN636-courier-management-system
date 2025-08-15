@@ -4,6 +4,22 @@ const Role = require("../models/Role");
 
 const users = asyncHandler(async (req, res) => {
 	try {
+		const isCourier = req.query.role === "Courier";
+
+		if (isCourier) {
+			const courierRole = await Role.findOne({ name: "Courier" });
+			const users = await User.find({ role: courierRole._id })
+				.select("-password")
+				.populate("role")
+				.sort({
+					_id: -1,
+				});
+			res.json({
+				success: true,
+				data: users,
+			});
+			return;
+		}
 		const users = await User.find()
 			.select("-password")
 			.populate("role")

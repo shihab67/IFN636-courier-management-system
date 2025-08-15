@@ -12,6 +12,11 @@ const EditUser = Loadable(lazy(() => import('views/users/edit')));
 const UserProfile = Loadable(lazy(() => import('views/user/profile')));
 const UpdateUserProfile = Loadable(lazy(() => import('views/user/UpdateProfile')));
 const UserSettings = Loadable(lazy(() => import('views/user/settings')));
+const Deliveries = Loadable(lazy(() => import('views/delivery')));
+const CreateDeliveries = Loadable(lazy(() => import('views/delivery/create')));
+const TrackDelivery = Loadable(lazy(() => import('views/delivery/track')));
+const ViewDelivery = Loadable(lazy(() => import('views/delivery/ViewDelivery')));
+const EditDelivery = Loadable(lazy(() => import('views/delivery/edit')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -27,31 +32,31 @@ const MainRoutes = {
         }
       ]
     },
-    // {
-    //   path: 'leave-request',
-    //   children: [
-    //     {
-    //       path: 'leave-calendar',
-    //       element: <LeaveRequest />
-    //     },
-    //     {
-    //       path: 'create',
-    //       element: <CreateLeave />
-    //     },
-    //     {
-    //       path: 'leave-list/:type',
-    //       element: <LeaveList />
-    //     },
-    //     {
-    //       path: 'view/:id',
-    //       element: <LeaveDetails />
-    //     },
-    //     {
-    //       path: 'edit/:id',
-    //       element: <EditLeave />
-    //     }
-    //   ]
-    // },
+    {
+      path: 'deliveries',
+      children: [
+        {
+          path: '',
+          element: <Deliveries />
+        },
+        {
+          path: 'create',
+          element: <CreateDeliveries />
+        },
+        {
+          path: 'track/:id',
+          element: <TrackDelivery />
+        },
+        {
+          path: 'view/:id',
+          element: <ViewDelivery />
+        },
+        {
+          path: 'edit/:id',
+          element: <EditDelivery />
+        }
+      ]
+    },
     {
       path: 'users',
       children: [
