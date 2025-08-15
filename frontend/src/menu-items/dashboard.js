@@ -15,7 +15,8 @@ const dashboard = {
       type: 'item',
       url: '/dashboard',
       icon: icons.IconDashboard,
-      breadcrumbs: false
+      breadcrumbs: false,
+      role: ["Admin", "Courier", "Customer"]
     },
     // {
     //   id: 'leave-request',
@@ -53,7 +54,8 @@ const dashboard = {
       type: 'item',
       url: '/users',
       icon: icons.IconUsers,
-      breadcrumbs: true
+      breadcrumbs: true,
+      role: ["Admin"]
     },
     {
       id: 'deliveries',
@@ -61,7 +63,8 @@ const dashboard = {
       type: 'item',
       url: '/deliveries',
       icon: icons.IconTruckDelivery,
-      breadcrumbs: true
+      breadcrumbs: true,
+      role: ["Admin", "Customer","Courier"]
     }
   ]
 };

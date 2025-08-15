@@ -1,17 +1,20 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import { List, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 // project imports
-import NavItem from '../NavItem';
+import { useContext } from 'react';
+import AuthContext from 'store/modules/authContext';
 import NavCollapse from '../NavCollapse';
+import NavItem from '../NavItem';
 
 // ==============================|| SIDEBAR MENU LIST GROUP ||============================== //
 
 const NavGroup = ({ item }) => {
   const theme = useTheme();
+  const authCtx = useContext(AuthContext);
 
   // menu list collapse & items
   const items = item.children?.map((menu) => {
@@ -19,7 +22,7 @@ const NavGroup = ({ item }) => {
       case 'collapse':
         return <NavCollapse key={menu.id} menu={menu} level={1} />;
       case 'item':
-        return <NavItem key={menu.id} item={menu} level={1} />;
+        return menu.role.includes(authCtx.currentUser.role) ? <NavItem key={menu.id} item={menu} level={1} l /> : null;
       default:
         return (
           <Typography key={menu.id} variant="h6" color="error" align="center">
