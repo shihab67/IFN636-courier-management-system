@@ -28,6 +28,7 @@ Database: MongoDB
 **Postman Collection**
 
 [https://crimson-sunset-9367-1.postman.co/workspace/My-Workspace~ce781ff7-23f1-4bed-8ff5-9894be6aa115/collection/10879134-89941938-d525-46fd-baee-abd703dd03c6?action=share&creator=10879134](https://crimson-sunset-9367-1.postman.co/workspace/My-Workspace~ce781ff7-23f1-4bed-8ff5-9894be6aa115/collection/10879134-89941938-d525-46fd-baee-abd703dd03c6?action=share&creator=10879134)
+
 ### Sample Data
  **User credentials and roles**
 |Sl.|Email|Password|Role
