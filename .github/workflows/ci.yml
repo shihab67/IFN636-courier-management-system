@@ -3,7 +3,7 @@ name: Backend CI
 on:
   push:
     branches:
-      - main # Trigger CI on pushes to the production branch
+      - main
 
 jobs:
   deploy:
@@ -20,37 +20,26 @@ jobs:
         with:
           node-version: 22
 
-      - name: Print Env Secret
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PORT: ${{ secrets.PORT }}
-        run: |
-          echo "Secret 1 is: $MONGO_URI"
-          echo "Secret 2 is: $JWT_SECRET"
-          echo "Secret 3 is: $PORT"
-
-      # Kill all pm2 processes before starting fresh
+      # Kill all pm2 processes to start fresh
       - name: Kill Existing PM2 Processes
         run: pm2 delete all || true
 
-      # Setup .env for Backend
+      # Backend .env
       - name: Setup Environment File (Backend)
         working-directory: ./backend
         run: |
           cp .env.example .env
           echo "${{ secrets.PROD }}" >> .env
-          echo "Backend .env file:"
-          cat .env
+          echo "✅ Backend .env created"
 
-      # Setup .env for Frontend
+      # Frontend .env (includes REACT_APP_API_URL)
       - name: Setup Environment File (Frontend)
         working-directory: ./frontend
         run: |
           cp .env.example .env
           echo "${{ secrets.FRONTEND_PROD }}" >> .env
-          echo "Frontend .env file:"
-          cat .env
+          echo "✅ Frontend .env created"
+          cat .env  # 🔍 debug (remove later to hide secrets)
 
       # Install backend dependencies
       - name: Install Backend Dependencies
@@ -79,6 +68,6 @@ jobs:
         run: |
           pm2 serve build/ 3000 --name "Frontend" --spa
 
-      # Save pm2 process list so it restarts on reboot
+      # Save pm2 process list so they restart on reboot
       - name: Save PM2 Process List
         run: pm2 save
