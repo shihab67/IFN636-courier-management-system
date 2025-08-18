@@ -12,7 +12,7 @@ const app = express();
 // CORS setup
 app.use(
 	cors({
-		origin: "http://3.27.245.23/:3000",
+		origin: process.env.FRONTEND_URL,
 		methods: "GET,POST,PUT,DELETE,PATCH",
 		credentials: true,
 	})

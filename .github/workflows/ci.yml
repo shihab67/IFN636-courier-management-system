@@ -1,58 +1,84 @@
 name: Backend CI
 
 on:
-    push:
-        branches:
-            - main # Trigger CI on pushes to the production branch
+  push:
+    branches:
+      - main # Trigger CI on pushes to the production branch
 
 jobs:
-    deploy:
-        name: Build & Deploy
-        runs-on: self-hosted
+  deploy:
+    name: Build & Deploy
+    runs-on: self-hosted
 
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v3
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-            # Set up Node.js
-            - name: Setup Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 22
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-            - name: Print Env Secret
-              env:
-                  MONGO_URI: ${{ secrets.MONGO_URI }}
-                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
-                  PORT: ${{ secrets.PORT }}
-              run: |
-                  echo "Secret 1 is: $MONGO_URI"
-                  echo "Secret 2 is: $JWT_SECRET"
-                  echo "Secret 3 is: $PORT"
+      - name: Print Env Secret
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
+        run: |
+          echo "Secret 1 is: $MONGO_URI"
+          echo "Secret 2 is: $JWT_SECRET"
+          echo "Secret 3 is: $PORT"
 
-            - run: pm2 stop all
+      # Kill all pm2 processes before starting fresh
+      - name: Kill Existing PM2 Processes
+        run: pm2 delete all || true
 
-            # Install backend dependencies
-            - name: Install Backend Dependencies
-              working-directory: ./backend
-              run: |
-                  npm install --global yarn
-                  yarn install
+      # Setup .env for Backend
+      - name: Setup Environment File (Backend)
+        working-directory: ./backend
+        run: |
+          cp .env.example .env
+          echo "${{ secrets.PROD }}" >> .env
+          echo "Backend .env file:"
+          cat .env
 
-            # Install frontend dependencies & build
-            - name: Install Frontend Dependencies & Build
-              working-directory: ./frontend
-              run: |
-                  sudo rm -rf ./build
-                  yarn install
-                  CI=false yarn run build
+      # Setup .env for Frontend
+      - name: Setup Environment File (Frontend)
+        working-directory: ./frontend
+        run: |
+          cp .env.example .env
+          echo "${{ secrets.FRONTEND_PROD }}" >> .env
+          echo "Frontend .env file:"
+          cat .env
 
-            # Create .env for backend
-            - name: Setup Environment File
-              working-directory: ./backend
-              run: |
-                  touch .env
-                  echo "${{ secrets.PROD }}" > .env
+      # Install backend dependencies
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: |
+          npm install --global yarn
+          yarn install
 
-            - run: pm2 start all
-            - run: pm2 restart all
+      # Install frontend dependencies & build
+      - name: Install Frontend Dependencies & Build
+        working-directory: ./frontend
+        run: |
+          sudo rm -rf ./build
+          yarn install
+          CI=false yarn run build
+
+      # Start backend with pm2
+      - name: Start Backend with PM2
+        working-directory: ./backend
+        run: |
+          pm2 start "npm run start" --name "Backend"
+
+      # Serve frontend with pm2
+      - name: Serve Frontend with PM2
+        working-directory: ./frontend
+        run: |
+          pm2 serve build/ 3000 --name "Frontend" --spa
+
+      # Save pm2 process list so it restarts on reboot
+      - name: Save PM2 Process List
+        run: pm2 save
