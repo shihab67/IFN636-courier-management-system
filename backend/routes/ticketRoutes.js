@@ -10,7 +10,7 @@ router.get("/", protect, c.list);
 router.get("/:id", protect, ensureTicketParticipant, c.get);
 router.put("/:id", protect, ensureTicketParticipant, c.update);
 
-router.patch("/:id/status", protect, ensureTicketParticipant, c.transition);
+router.patch("/:id/transition", protect, hasAccess("Admin"), c.transition);
 router.get("/:id/comments", protect, c.getComments);
 router.post("/:id/comments", protect, ensureTicketParticipant, c.comment);
 

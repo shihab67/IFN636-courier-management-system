@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconTruckDelivery, IconUsers } from '@tabler/icons-react';
+import { IconDashboard, IconTruckDelivery, IconUsers, IconTicket } from '@tabler/icons-react';
 
 // constant
-const icons = { IconDashboard, IconUsers, IconTruckDelivery };
+const icons = { IconDashboard, IconUsers, IconTruckDelivery, IconTicket };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -16,7 +16,7 @@ const dashboard = {
       url: '/dashboard',
       icon: icons.IconDashboard,
       breadcrumbs: false,
-      role: ["Admin", "Courier", "Customer"]
+      role: ['Admin', 'Courier', 'Customer']
     },
     // {
     //   id: 'leave-request',
@@ -55,7 +55,7 @@ const dashboard = {
       url: '/users',
       icon: icons.IconUsers,
       breadcrumbs: true,
-      role: ["Admin"]
+      role: ['Admin']
     },
     {
       id: 'deliveries',
@@ -64,7 +64,16 @@ const dashboard = {
       url: '/deliveries',
       icon: icons.IconTruckDelivery,
       breadcrumbs: true,
-      role: ["Admin", "Customer","Courier"]
+      role: ['Admin', 'Customer', 'Courier']
+    },
+    {
+      id: 'support-tickets',
+      title: 'Support Tickets',
+      type: 'item',
+      url: '/support-tickets',
+      icon: icons.IconTicket,
+      breadcrumbs: true,
+      role: ['Admin', 'Customer', 'Courier']
     }
   ]
 };

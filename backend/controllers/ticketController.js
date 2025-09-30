@@ -123,7 +123,7 @@ exports.getComments = async (req, res, next) => {
 	try {
 		const list = await TicketComment.find({ ticketId: req.params.id }).sort({
 			createdAt: -1,
-		});
+		}).populate("authorId", "name email");
 		return response.success(res, "Comments fetched successfully", list);
 	} catch (e) {
 		return response.error(res, e.message, 500);

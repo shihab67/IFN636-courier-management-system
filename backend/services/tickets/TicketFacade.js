@@ -1,5 +1,14 @@
 const StateFactory = require("./state/TicketStateFactory");
 
+const STATE_TO_ACTION = {
+	OPEN: "reopen",
+	ASSIGNED: "assign",
+	IN_PROGRESS: "start_progress",
+	REQUEST_INFO: "request_info",
+	RESOLVED: "resolve",
+	CLOSED: "close",
+};
+
 class TicketFacade {
 	constructor(models, notifier) {
 		this.Ticket = models.Ticket;
@@ -28,8 +37,13 @@ class TicketFacade {
 		const t = await this.Ticket.findById(ticketId);
 		if (!t) throw new Error("Ticket not found");
 
+		// normalize: allow either "start_progress" or "IN_PROGRESS"
+		const raw = String(action || "");
+		const upper = raw.toUpperCase();
+		const normalized = STATE_TO_ACTION[upper] || raw.toLowerCase(); // e.g. "IN_PROGRESS" -> "start_progress"
+
 		const state = StateFactory.from(t, { actorId });
-		switch (action) {
+		switch (normalized) {
 			case "assign":
 				state.assign(assigneeId);
 				break;

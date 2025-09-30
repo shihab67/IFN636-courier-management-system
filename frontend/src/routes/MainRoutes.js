@@ -17,6 +17,12 @@ const CreateDeliveries = Loadable(lazy(() => import('views/delivery/create')));
 const TrackDelivery = Loadable(lazy(() => import('views/delivery/track')));
 const ViewDelivery = Loadable(lazy(() => import('views/delivery/ViewDelivery')));
 const EditDelivery = Loadable(lazy(() => import('views/delivery/edit')));
+const SupportTickets = Loadable(lazy(() => import('views/support_tickets')));
+const CreateSupportTicket = Loadable(lazy(() => import('views/support_tickets/Create')));
+const EditSupportTicket = Loadable(lazy(() => import('views/support_tickets/Edit')));
+const AssignSupportTicket = Loadable(lazy(() => import('views/support_tickets/AssignCourier')));
+const UpdateSupportTicketStatus = Loadable(lazy(() => import('views/support_tickets/UpdateStatus')));
+const SupportTicketComments = Loadable(lazy(() => import('views/support_tickets/Comments')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -88,6 +94,35 @@ const MainRoutes = {
         {
           path: 'settings',
           element: <UserSettings />
+        }
+      ]
+    },
+    {
+      path: 'support-tickets',
+      children: [
+        {
+          path: '',
+          element: <SupportTickets />
+        },
+        {
+          path: 'create',
+          element: <CreateSupportTicket />
+        },
+        {
+          path: 'edit/:id',
+          element: <EditSupportTicket />
+        },
+        {
+          path: 'assign/:id',
+          element: <AssignSupportTicket />
+        },
+        {
+          path: 'update-status/:id',
+          element: <UpdateSupportTicketStatus />
+        },
+        {
+          path: 'comments/:id',
+          element: <SupportTicketComments />
         }
       ]
     }
