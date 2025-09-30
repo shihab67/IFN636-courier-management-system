@@ -31,6 +31,7 @@ app.use("/api/auth", upload.any(), require("./routes/authRoutes"));
 app.use("/api/users", upload.any(), require("./routes/userRoutes"));
 app.use("/api/delivery", upload.any(), require("./routes/deliveryRoutes"));
 app.use("/api/ticket", upload.any(), require("./routes/ticketRoutes"));
+app.use("/api/notification", upload.any(), require("./routes/preferencesRoutes"));
 
 // View engine setup
 app.set("views", path.join(__dirname, "views"));

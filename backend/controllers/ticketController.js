@@ -8,14 +8,17 @@ const EmailAdapter = require("../services/tickets/adapters/EmailAdapter");
 const AuditedNotifier = require("../services/tickets/decorators/AuditedNotifier");
 const RateLimitedNotifier = require("../services/tickets/proxies/RateLimitedNotifier");
 
+const PreferenceFilterDecorator = require("../services/preferences/PreferenceFilterDecorator");
+
 const response = require("../utils/response");
 
 // Build notifier chain: EmailAdapter -> AuditedDecorator -> RateLimitedProxy
 const baseAdapter = new EmailAdapter();
 const audited = new AuditedNotifier(baseAdapter);
 const rateLimited = new RateLimitedNotifier(audited, 250);
+const prefFiltered = new PreferenceFilterDecorator(rateLimited);
 
-const notifier = NotificationCenter.init({ Notification }, rateLimited);
+const notifier = NotificationCenter.init({ Notification }, prefFiltered);
 const facade = new TicketFacade({ Ticket, TicketComment }, notifier);
 
 exports.create = async (req, res, next) => {
