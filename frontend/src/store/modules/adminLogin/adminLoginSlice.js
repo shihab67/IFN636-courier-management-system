@@ -392,4 +392,22 @@ export const addTicketComment = createAsyncThunk('adminLoginSlice/addTicketComme
     });
 });
 
+export const getNotifications = createAsyncThunk('adminLoginSlice/getNotifications', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/ticket/me/notifications', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
 export default adminLoginSlice.reducer;
