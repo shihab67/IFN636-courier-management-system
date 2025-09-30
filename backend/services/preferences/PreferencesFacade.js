@@ -16,27 +16,21 @@ class PreferencesFacade {
 	}
 
 	async updateForUser(userId, patch) {
-		let newValue;
-
-		if (typeof patch?.enabled === "boolean") {
-			newValue = patch.enabled;
-		} else if (typeof patch?.enabled === "string") {
-			const v = patch.enabled.trim().toLowerCase();
-			newValue = v === "true" || v === "1" || v === "yes" || v === "on";
-		}
-
 		const $set = {};
-		if (typeof newValue === "boolean") {
-			$set.enabled = newValue;
+		if (patch.hasOwnProperty("enabled")) {
+			if (typeof patch.enabled === "boolean") {
+				$set.enabled = patch.enabled;
+			} else if (typeof patch.enabled === "string") {
+				if (patch.enabled.toLowerCase() === "true") $set.enabled = true;
+				else if (patch.enabled.toLowerCase() === "false")
+					$set.enabled = false;
+			}
 		}
-
-		const doc = await this.NotificationPreference.findOneAndUpdate(
+		return this.NotificationPreference.findOneAndUpdate(
 			{ userId },
-			Object.keys($set).length ? { $set } : {},
-			{ new: true, upsert: true, setDefaultsOnInsert: true }
+			{ $set },
+			{ new: true, upsert: true }
 		).lean();
-
-		return { enabled: !!doc.enabled };
 	}
 }
 module.exports = PreferencesFacade;

@@ -410,4 +410,41 @@ export const getNotifications = createAsyncThunk('adminLoginSlice/getNotificatio
     });
 });
 
+export const getNotificationPreference = createAsyncThunk('adminLoginSlice/getNotificationPreference', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/notification/me/notification-preferences', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const updateNotificationPreference = createAsyncThunk('adminLoginSlice/updateNotificationPreference', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  console.log(data, "data")
+  return await axios
+    .put(process.env.REACT_APP_API_URL + 'api/notification/me/notification-preferences', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
 export default adminLoginSlice.reducer;

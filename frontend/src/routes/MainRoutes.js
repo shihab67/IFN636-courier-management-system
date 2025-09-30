@@ -23,6 +23,7 @@ const EditSupportTicket = Loadable(lazy(() => import('views/support_tickets/Edit
 const AssignSupportTicket = Loadable(lazy(() => import('views/support_tickets/AssignCourier')));
 const UpdateSupportTicketStatus = Loadable(lazy(() => import('views/support_tickets/UpdateStatus')));
 const SupportTicketComments = Loadable(lazy(() => import('views/support_tickets/Comments')));
+const NotificationPreference = Loadable(lazy(() => import('views/notification-preference')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -123,6 +124,15 @@ const MainRoutes = {
         {
           path: 'comments/:id',
           element: <SupportTicketComments />
+        }
+      ]
+    },
+    {
+      path: 'notification-preference',
+      children: [
+        {
+          path: '',
+          element: <NotificationPreference />
         }
       ]
     }

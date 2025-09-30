@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard, IconTruckDelivery, IconUsers, IconTicket } from '@tabler/icons-react';
+import { IconDashboard, IconTruckDelivery, IconUsers, IconTicket, IconBell } from '@tabler/icons-react';
 
 // constant
-const icons = { IconDashboard, IconUsers, IconTruckDelivery, IconTicket };
+const icons = { IconDashboard, IconUsers, IconTruckDelivery, IconTicket, IconBell };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -74,6 +74,15 @@ const dashboard = {
       icon: icons.IconTicket,
       breadcrumbs: true,
       role: ['Admin', 'Customer', 'Courier']
+    },
+    {
+      id: 'notification-preference',
+      title: 'Notification Preference',
+      type: 'item',
+      url: '/notification-preference',
+      icon: icons.IconBell,
+      breadcrumbs: true,
+      role: ['Customer']
     }
   ]
 };
