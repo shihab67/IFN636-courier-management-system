@@ -9,14 +9,37 @@ import LogoSection from '../LogoSection';
 import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
+import AuthContext from 'store/modules/authContext';
+import { useContext, useEffect, useState } from 'react';
+import { useAppDispatch } from 'store/reducer';
 
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
+import { getNotifications } from 'store/modules/adminLogin/adminLoginSlice';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
+  const authCtx = useContext(AuthContext);
+  const [notifications, setNotifications] = useState([]);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+      const load = async () => {
+        try {
+          const res = await dispatch(getNotifications({ token: authCtx.currentUser.token }));
+          if (res.payload?.success) {
+            setNotifications(res.payload.data);
+          } else {
+            throw new Error(res.payload?.message || 'Failed to fetch notifications');
+          }
+        } catch (err) {
+          toast.error(err.message);
+        }
+      };
+      load();
+    }, [dispatch, authCtx.currentUser.token]);
 
   return (
     <>
@@ -61,7 +84,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}
-      <NotificationSection />
+      <NotificationSection notifications={notifications} />
       <ProfileSection />
     </>
   );

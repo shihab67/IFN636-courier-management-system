@@ -1,10 +1,10 @@
 {
 	"name": "task-manager-backend",
 	"version": "1.0.0",
-	"description": "Backend for Task Manager App",
+	"description": "Backend for Courier Management System",
 	"main": "server.js",
 	"scripts": {
-		"test": "mocha",
+		"test": "mocha --timeout 5000 --recursive",
 		"start": "node server.js",
 		"dev": "nodemon server.js",
 		"prod": "node server.js",
@@ -12,7 +12,6 @@
 	},
 	"dependencies": {
 		"bcrypt": "^5.0.1",
-		"chai": "^4.5.0",
 		"chai-http": "^4.3.0",
 		"cors": "^2.8.5",
 		"courier-management-system": "file:..",
@@ -24,11 +23,12 @@
 		"request": "^2.88.2"
 	},
 	"devDependencies": {
+		"chai": "^6.2.0",
 		"esm": "^3.2.25",
-		"mocha": "^11.0.1",
+		"mocha": "^11.7.2",
 		"nodemon": "^2.0.15",
-		"sinon": "^19.0.2"
+		"sinon": "^19.0.5"
 	},
-	"author": "Task Manager Team",
+	"author": "Courier Management System Team",
 	"license": "ISC"
 }

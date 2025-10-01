@@ -230,7 +230,7 @@ export const deactivateUser = createAsyncThunk('adminLoginSlice/deleteUser', asy
     });
 });
 
-export const getProfile = createAsyncThunk('adminLoginSlice/getUser', async (data) => {
+export const getProfile = createAsyncThunk('adminLoginSlice/getProfile', async (data) => {
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
     .get(process.env.REACT_APP_API_URL + 'api/users/me/profile', header)
@@ -252,6 +252,187 @@ export const updateUserPassword = createAsyncThunk('adminLoginSlice/updateUserPa
   const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
   return await axios
     .patch(process.env.REACT_APP_API_URL + 'api/auth/update-password', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const getAllSupportTickets = createAsyncThunk('adminLoginSlice/getAllSupportTickets', async (data) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/ticket', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const createSupportTicket = createAsyncThunk('adminLoginSlice/createSupportTicket', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .post(process.env.REACT_APP_API_URL + 'api/ticket', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const getTicketById = createAsyncThunk('adminLoginSlice/getTicketById', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/ticket/' + data.id, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const updateSupportTicket = createAsyncThunk('adminLoginSlice/updateSupportTicket', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .put(process.env.REACT_APP_API_URL + 'api/ticket/' + data.id, data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const supportTicketTransition = createAsyncThunk('adminLoginSlice/supportTicketTransition', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .patch(process.env.REACT_APP_API_URL + 'api/ticket/' + data.id + '/transition', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const getTicketComments = createAsyncThunk('adminLoginSlice/getTicketComments', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/ticket/' + data.id + '/comments', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const addTicketComment = createAsyncThunk('adminLoginSlice/addTicketComment', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .post(process.env.REACT_APP_API_URL + 'api/ticket/' + data.id + '/comments', data.data, header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const getNotifications = createAsyncThunk('adminLoginSlice/getNotifications', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/ticket/me/notifications', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const getNotificationPreference = createAsyncThunk('adminLoginSlice/getNotificationPreference', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  return await axios
+    .get(process.env.REACT_APP_API_URL + 'api/notification/me/notification-preferences', header)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return rejectWithValue({
+          status: error.response.status,
+          message: error.response.data.message || 'Something went wrong'
+        });
+      }
+      return rejectWithValue({ message: error.message });
+    });
+});
+
+export const updateNotificationPreference = createAsyncThunk('adminLoginSlice/updateNotificationPreference', async (data, { rejectWithValue }) => {
+  const header = { headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + data.token } };
+  console.log(data, "data")
+  return await axios
+    .put(process.env.REACT_APP_API_URL + 'api/notification/me/notification-preferences', data.data, header)
     .then(function (response) {
       return response.data;
     })
