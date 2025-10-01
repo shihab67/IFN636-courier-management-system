@@ -17,7 +17,7 @@ class PreferenceFilterDecorator {
 		const disabled = new Set(
 			docs.filter((d) => d.enabled === false).map((d) => String(d.userId))
 		);
-		// default behavior: if no pref doc → enabled=true
+		
 		const allowed = userIds.filter((id) => !disabled.has(String(id)));
 
 		if (allowed.length === 0) return;

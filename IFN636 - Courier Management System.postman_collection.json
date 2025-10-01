@@ -1,0 +1,1008 @@
+{
+	"info": {
+		"_postman_id": "89941938-d525-46fd-baee-abd703dd03c6",
+		"name": "IFN636 - Courier Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10879134"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "couriersayed@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "adminpass",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "john",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "adminpass",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "admin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "Courier",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register?ref=courier",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "ref",
+									"value": "courier"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTEzOTIzOSwiZXhwIjoxNzU3NzMxMjM5fQ.XPWTwnFQS6EuA0LsOIQt0yFt96kiGYk_0caO3YsdJjw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/users?role=Courier",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "Courier"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTEzOTIzOSwiZXhwIjoxNzU3NzMxMjM5fQ.XPWTwnFQS6EuA0LsOIQt0yFt96kiGYk_0caO3YsdJjw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/users/689d3e05f0648ca0862fbca3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"689d3e05f0648ca0862fbca3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTEzOTIzOSwiZXhwIjoxNzU3NzMxMjM5fQ.XPWTwnFQS6EuA0LsOIQt0yFt96kiGYk_0caO3YsdJjw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "User from postman",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "ufp@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "adminpass",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "Courier",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "true",
+									"description": "true/false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTEzOTIzOSwiZXhwIjoxNzU3NzMxMjM5fQ.XPWTwnFQS6EuA0LsOIQt0yFt96kiGYk_0caO3YsdJjw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "User from postman updated",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "ufp1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "adminpass",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "Courier",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/users/689d5a4f1605b83a7276d778",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"689d5a4f1605b83a7276d778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTEzOTIzOSwiZXhwIjoxNzU3NzMxMjM5fQ.XPWTwnFQS6EuA0LsOIQt0yFt96kiGYk_0caO3YsdJjw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/users/689d5a4f1605b83a7276d778",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"689d5a4f1605b83a7276d778"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTE3OTU1NSwiZXhwIjoxNzU3NzcxNTU1fQ.Q7xWFGDbg_OkNZyfCHW5o72sbeEn-Av7dfOnvuVjmfc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/users/me/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"me",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delivery",
+			"item": [
+				{
+					"name": "Get Deliveries",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTgzNTg0ZThmM2UxNDUwZjIwOSIsImlhdCI6MTc1NTEzOTIzOSwiZXhwIjoxNzU3NzMxMjM5fQ.XPWTwnFQS6EuA0LsOIQt0yFt96kiGYk_0caO3YsdJjw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/delivery",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"delivery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Delivery",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/delivery/43sfdsdvdv",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"delivery",
+								"43sfdsdvdv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Delivery",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "status",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "courierId",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/delivery/5vvvxfx",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"delivery",
+								"5vvvxfx"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ticket",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Ticket 1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Ticket 1 desc",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Ticket 1 updated",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Ticket 1 desc updated",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket/68d9b8bc4adab1456d636a26",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket",
+								"68d9b8bc4adab1456d636a26"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find one",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket/68d9b8bc4adab1456d636a26",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket",
+								"68d9b8bc4adab1456d636a26"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transition",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "action",
+									"value": "start_progress",
+									"type": "text"
+								},
+								{
+									"key": "assigneeId",
+									"value": "689d3e05f0648ca0862fbca3",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket/68d9b8bc4adab1456d636a26/transition",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket",
+								"68d9b8bc4adab1456d636a26",
+								"transition"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message",
+									"value": "Ticket 1 message",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket/68d9b8bc4adab1456d636a26/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket",
+								"68d9b8bc4adab1456d636a26",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ticket comments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket/68d9b8bc4adab1456d636a26/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket",
+								"68d9b8bc4adab1456d636a26",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "Notifications",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/ticket/me/notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ticket",
+								"me",
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get  notification preference",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/notification/me/notification-preferences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notification",
+								"me",
+								"notification-preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update  notification preference",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4OWMwOTg3NTg0ZThmM2UxNDUwZjIxNSIsImlhdCI6MTc1OTA5ODg1MSwiZXhwIjoxNzYxNjkwODUxfQ.0kH3m_k79TXyFK0W9f1RiobcT-kqjXoTlNCnslE73Hg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "enabled",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/notification/me/notification-preferences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"notification",
+								"me",
+								"notification-preferences"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		}
+	]
+}

@@ -7,7 +7,6 @@ const hasAccessMiddleware = (allowedRoles) => {
 					.json({ message: "Unauthorized: No user info" });
 			}
 
-			// Convert to array if a single role string is passed
 			if (typeof allowedRoles === "string") {
 				allowedRoles = [allowedRoles];
 			}

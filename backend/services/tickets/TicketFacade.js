@@ -13,7 +13,7 @@ class TicketFacade {
 	constructor(models, notifier) {
 		this.Ticket = models.Ticket;
 		this.TicketComment = models.TicketComment;
-		this.notifier = notifier; // NotificationCenter.instance()
+		this.notifier = notifier;
 	}
 
 	async create({ userId, title, description, category, priority }) {
