@@ -24,7 +24,7 @@ class NotificationCenter {
 				})
 			)
 		);
-		if (this.notifier) this.notifier.sendBulk(userIds, type, payload);
+		// if (this.notifier) this.notifier.sendBulk(userIds, type, payload);
 	}
 }
 module.exports = NotificationCenter;

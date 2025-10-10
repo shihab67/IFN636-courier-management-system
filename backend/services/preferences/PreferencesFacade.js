@@ -17,7 +17,7 @@ class PreferencesFacade {
 
 	async updateForUser(userId, patch) {
 		const $set = {};
-		if (patch.hasOwnProperty("enabled")) {
+		if (patch && "enabled" in patch) {
 			if (typeof patch.enabled === "boolean") {
 				$set.enabled = patch.enabled;
 			} else if (typeof patch.enabled === "string") {
